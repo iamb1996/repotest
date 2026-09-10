@@ -1,33 +1,23 @@
-from flask import Flask
+from fastapi import FastAPI
 
-app = Flask(__name__)
+app = FastAPI(
+    title="Azure FastAPI App",
+    description="My first FastAPI application deployed on Azure Container Apps",
+    version="1.0.0"
+)
 
 
-@app.route("/")
+@app.get("/")
 def home():
-    return """
-    <html>
-        <head>
-            <title>Azure Container Apps</title>
-        </head>
-
-        <body style="font-family: Arial; text-align: center; margin-top: 100px;">
-
-            <h1>Hello Azure Container Apps!</h1>
-
-            <p>My first serverless container application.</p>
-
-        </body>
-    </html>
-    """
+    return {
+        "message": "Hello Azure Container Apps!",
+        "framework": "FastAPI",
+        "status": "running"
+    }
 
 
-@app.route("/health")
+@app.get("/health")
 def health():
     return {
         "status": "healthy"
     }
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
