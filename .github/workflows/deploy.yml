@@ -1,0 +1,32 @@
+name: Deploy to Azure Container Apps
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AZURE_CONTAINER_APP_NAME: simple-flask-app
+  AZURE_RESOURCE_GROUP: rg-simple-container
+  AZURE_CONTAINER_APP_ENVIRONMENT: simple-flask-app-env
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Container Apps
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          containerAppName: ${{ env.AZURE_CONTAINER_APP_NAME }}
+          resourceGroup: ${{ env.AZURE_RESOURCE_GROUP }}
+          containerAppEnvironment: ${{ env.AZURE_CONTAINER_APP_ENVIRONMENT }}
